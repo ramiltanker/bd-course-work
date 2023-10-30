@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block document_title %}Авторизация{% endblock document_title %}
+
+{% block additional_styles %}
+<style>
+    .error-list {
+        list-style-position: inside;
+        border: 1px solid #ff000a;
+        background-color: #ffb9c2;
+        color: #ff000a;
+        padding: 10px;
+    }
+</style>
+{% endblock additional_styles %}
+
+{% block content %}
+    <h1>Авторизация</h1>
+    <form action="{% url 'users:login' %}" method="post" class="form">
+        {% csrf_token %}
+        {% if form.errors %}
+            <ol class="error-list">
+            {% for key, value in form.errors.items %}
+                {% for error in value %}
+                    <li class="error-list__item">{{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+            </ol>
+        {% endif %}
+        <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+        {{ form.username }}
+        <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+        {{ form.password }}
+        <button style="align-self: flex-end;" class="btn" type="submit">Отправить</button>
+    </form>
+{% endblock content %}

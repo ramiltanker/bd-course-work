@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block document_title %}Статья{% endblock document_title %}
+{% block additional_styles %}
+    <style>
+        .info {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+        }
+        .info__text {
+            min-height: 250px;
+        }
+        .flex-container {
+            display: flex;
+            gap: 20px;
+            height: 100%;
+        }
+        .info__image {
+            width: 100%;
+            max-width: 30%;
+            align-self: flex-start;
+            display: inline-block;
+            object-fit: cover;
+        }
+
+        .comments {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .comment {
+            width: 60%;
+            padding: 10px;
+            gap: 10px;
+            border: 1px solid black;
+        }
+        .comment__author {
+            font-weight: bold;
+        }
+
+        .btn {
+        box-shadow: 0 0 5px 1px gray;
+        margin: 7px 0px;
+        }
+    </style>
+{% endblock additional_styles %}
+{% block content %}
+    {% load static %}
+    <h1>{{ article.title }}</h1>
+    <h2>Содержание</h2>
+    <div class="info">
+        <div class="flex-container">
+            {% if article.image %}
+            <img class="info__image" src="{% static article.image %}" alt="">
+            {% endif %}
+            <p class="info__text common-text">{{article.text}}</p>
+        </div>
+        <p style="align-self: flex-end" class="common-text">Статья опубликована {{ article.created_at }}</p>
+    </div>
+{% endblock content %}

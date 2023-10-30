@@ -1,0 +1,57 @@
+
+{% extends "base.html" %}
+{% block document_title %}Все мастера{% endblock document_title %}
+
+{% block additional_styles %}
+<style>
+    .btn-link {
+        padding: 5px 7px;
+        background-color: lightgray;
+        border: 1px solid black
+    }
+
+    .services-container {
+        margin-top: 10px;
+        gap: 10px;
+    }
+
+    .card {
+        padding: 10px;
+        border: 1px solid black;
+        display: flex;
+        gap: 10px;
+    }
+    .card__text {
+        margin-top: 10px;
+    }
+    .card__title {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .bold_text {
+        font-weight: bold;
+    }
+</style>
+{% endblock additional_styles %}
+
+{% block content %}
+    {% load static %}
+    <h1>Все процедуры</h1>
+    <div class="services-container wrapper">
+    {% if services %}
+        {% for service in services %}
+            <div class="card wrapper">
+                <p class="card__title">{{ service.name }}</p>
+                <p class="common-text common-text--size_big card__text"><span class="bold_text">Стоимость:</span> {{ service.price }} рублей</p>
+                <p class="common-text common-text--size_big card__text"><span class="bold_text">Проложительность:</span> {{ service.duration }} минут</p>
+                <p class="common-text card__text"><span class="bold_text">Относится к специализации:</span> {{ service.specialization.name }}</p>
+                <p class="common-text card__text"><span class="bold_text">Описание:</span> {{ service.description }}</p>
+                {% if user.is_authenticated %}
+                <a class="btn btn-link" href="{% url 'beautySalon:make_appointment' service.id %}">Оформить запись</a>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% endif %}
+    </div>
+{% endblock content %}

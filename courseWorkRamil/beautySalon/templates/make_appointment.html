@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block document_title %}Регистрация на запись{% endblock document_title %}
+
+{% block additional_styles %}
+<style>
+    .btn-link {
+        padding: 5px 7px;
+        background-color: lightgray;
+        border: 1px solid black
+    }
+
+    .services-container {
+        margin-top: 10px;
+        gap: 10px;
+    }
+
+    .card {
+        padding: 10px;
+        border: 1px solid black;
+        display: flex;
+        gap: 10px;
+    }
+    .card__text {
+        margin-top: 10px;
+    }
+    .card__title {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .bold_text {
+        font-weight: bold;
+    }
+</style>
+{% endblock additional_styles %}
+
+{% block content %}
+    {% load extra_funcs %}
+    {% load static %}
+    <h1>Регистрация на запись - {{ service.name }}</h1>
+    {% get_time_for_service service as all_times %}
+    {% get_masters_for_service service user as all_masters %}
+    <p class="common-text common-text--size_big card__text"><span class="bold_text">Стоимость:</span> {{ service.price }} рублей</p>
+                <p class="common-text common-text--size_big card__text"><span class="bold_text">Проложительность:</span> {{ service.duration }} минут</p>
+                <p class="common-text card__text"><span class="bold_text">Относится к специализации:</span> {{ service.specialization.name }}</p>
+                <p class="common-text card__text"><span class="bold_text">Описание:</span> {{ service.description }}</p>
+    <form method="post" class="form" action="{% url 'beautySalon:make_appointment' service.id %}">
+        {% csrf_token %}
+        {% if message %}
+        <p class="common-text">{{ message }}</p>
+        {% endif %}
+
+        <label for="time">Выберите мастера</label>
+        <select name="master" id="master">
+            {% for master in all_masters %}
+            <option value="{{ master.id }}">{{ master }} - рейтинг: {% get_rating master %}</option>
+            {% endfor %}
+        </select>
+        <label for="date">Выберите дату</label>
+        <input type="date" name="date" value="{% get_current_date %}" min="{% get_current_date %}" id="date">
+        <label for="time">Выберите время</label>
+        <select name="time" id="time">
+            {% for time in all_times %}
+            <option value="{{ time }}">{{ time }}</option>
+            {% endfor %}
+        </select>
+        <button class="btn" type="submit">Оформить запись</button>
+    </form>
+{% endblock content %}
